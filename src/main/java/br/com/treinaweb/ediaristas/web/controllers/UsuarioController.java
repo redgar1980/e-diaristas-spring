@@ -1,5 +1,7 @@
 package br.com.treinaweb.ediaristas.web.controllers;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
+import br.com.treinaweb.ediaristas.web.dtos.AlterarSenhaForm;
 import br.com.treinaweb.ediaristas.web.dtos.FlashMessage;
 import br.com.treinaweb.ediaristas.web.dtos.UsuarioCadastroForm;
 import br.com.treinaweb.ediaristas.web.dtos.UsuarioEdicaoForm;
@@ -98,6 +101,7 @@ public class UsuarioController {
         
 
     }
+
     @GetMapping("/{id}/excluir")
     public String excluir(@PathVariable Long id, RedirectAttributes attrs) {
         service.excluirPorId(id);
@@ -105,5 +109,35 @@ public class UsuarioController {
         attrs.addFlashAttribute("alert", new FlashMessage("alert-success", "Usuário excluido com sucesso!"));
 
         return "redirect:/admin/usuarios";
+    }
+
+    @GetMapping("/alterar-senha")
+    public ModelAndView alterarSenha() {
+        var modelAndView = new ModelAndView("admin/usuario/alterar-senha");
+
+        modelAndView.addObject("alterarSenhaForm", new AlterarSenhaForm());
+
+        return modelAndView;
+    }
+
+    @PostMapping("/alterar-senha")
+    public String alterarSenha(@Valid @ModelAttribute("alterarSenhaForm") AlterarSenhaForm alterarSenhaForm, 
+        BindingResult result, 
+        RedirectAttributes atts, 
+        Principal principal
+    ) {
+        if (result.hasErrors()) {
+            return "admin/usuario/alterar-senha";
+        }
+
+        try {
+            service.alterarSenha(alterarSenhaForm, principal.getName());
+            atts.addFlashAttribute("alert", new FlashMessage("alert-success", "Senha alterada com sucesso!"));
+        } catch (ValidacaoException e) {
+            result.addError(e.getFieldError());
+            return "admin/usuario/alterar-senha";
+        }
+
+        return "redirect:/admin/usuarios/alterar-senha";
     }
 }

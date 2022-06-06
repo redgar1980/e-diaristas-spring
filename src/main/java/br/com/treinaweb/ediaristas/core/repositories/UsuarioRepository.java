@@ -11,7 +11,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByEmail(String email);
 
-    @Query("SELECT count(*) > 0 FROM Usuario u WHERE u.email. = :email AND (u.id is null or u.id != :id)")
+    @Query("SELECT count(*) > 0 FROM Usuario u WHERE u.email = :email AND (:id is null or u.id != :id)")
     Boolean isEmailJaCadastrado(String email, Long id);
     
 }

@@ -1,0 +1,1 @@
+INSERT INTO `usuario` VALUES (1,'joao@gmail.com','Joao','$2a$10$/69nvDUmw3CiPzWmgNJefuIWledLqho.OYOKdnAqBx3aP3sZFWsCC','ADMIN');

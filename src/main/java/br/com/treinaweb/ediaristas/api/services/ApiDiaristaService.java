@@ -14,7 +14,8 @@ public class ApiDiaristaService {
     
     @Autowired
     private UsuarioRepository repository;
-
+    
+    @Autowired
     private ApiDiaristaMapper mapper;
 
     public List<DiaristaLocalidadeResponse> buscarDiaristasPorCep() {

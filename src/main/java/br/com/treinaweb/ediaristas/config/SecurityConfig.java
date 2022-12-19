@@ -60,6 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .rememberMeParameter("lembrar-me")
             .tokenValiditySeconds(rememberMeValiditySeconds)
             .key(rememberMeKey);
+
+        http.cors();
     }
     
     public void configure(WebSecurity web) throws Exception {

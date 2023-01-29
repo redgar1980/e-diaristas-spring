@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import br.com.treinaweb.ediaristas.api.dtos.responses.DiaristaLocalidadesPagedResponse;
+import br.com.treinaweb.ediaristas.api.dtos.responses.DisponibilidadeResponse;
 import br.com.treinaweb.ediaristas.api.mappers.ApiDiaristaMapper;
 import br.com.treinaweb.ediaristas.core.models.Usuario;
 import br.com.treinaweb.ediaristas.core.repositories.UsuarioRepository;
@@ -25,7 +26,7 @@ public class ApiDiaristaService {
     private EnderecoService enderecoService;
 
     public DiaristaLocalidadesPagedResponse buscarDiaristasPorCep(String cep) {
-        var codigoIbge = enderecoService.buscarEnderecoPorCep(cep).getIbge();
+        var codigoIbge = buscarCodigoIbgePorCep(cep);
         
         //var sort = Sort.by(Direction.DESC, "reputacao");
         var usuarioSort = Sort.sort(Usuario.class);
@@ -42,5 +43,17 @@ public class ApiDiaristaService {
             .toList();
 
         return new DiaristaLocalidadesPagedResponse(diaristas, tamanhoPagina, resultado.getTotalElements());
+    }
+
+    public DisponibilidadeResponse verifcarDisponibilidadePorCep(String cep){
+        var codigoIbge = buscarCodigoIbgePorCep(cep);
+
+        var disponibilidade = repository.existsByCidadesAtendidasCodigoIbge(codigoIbge);
+
+        return new DisponibilidadeResponse(disponibilidade);
+    }
+
+     private String buscarCodigoIbgePorCep(String cep) {
+        return enderecoService.buscarEnderecoPorCep(cep).getIbge();
     }
 }

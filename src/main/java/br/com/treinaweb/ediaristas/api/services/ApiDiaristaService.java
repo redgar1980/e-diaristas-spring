@@ -45,7 +45,7 @@ public class ApiDiaristaService {
         return new DiaristaLocalidadesPagedResponse(diaristas, tamanhoPagina, resultado.getTotalElements());
     }
 
-    public DisponibilidadeResponse verifcarDisponibilidadePorCep(String cep){
+    public DisponibilidadeResponse verificarDisponibilidadePorCep(String cep){
         var codigoIbge = buscarCodigoIbgePorCep(cep);
 
         var disponibilidade = repository.existsByCidadesAtendidasCodigoIbge(codigoIbge);

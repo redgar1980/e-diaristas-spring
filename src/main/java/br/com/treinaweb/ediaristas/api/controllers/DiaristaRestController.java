@@ -28,7 +28,7 @@ public class DiaristaRestController {
     @GetMapping("/disponibilidade")
     public DisponibilidadeResponse verificarDisponibilidadePorCep(
         @RequestParam(required = false) String cep) {   
-            return service.verifcarDisponibilidadePorCep(cep);
+            return service.verificarDisponibilidadePorCep(cep);
     }
 
 }

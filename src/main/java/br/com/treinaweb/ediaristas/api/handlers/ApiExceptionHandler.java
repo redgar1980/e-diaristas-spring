@@ -3,6 +3,7 @@ package br.com.treinaweb.ediaristas.api.handlers;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,7 +25,7 @@ import br.com.treinaweb.ediaristas.core.services.consultaendereco.exceptions.End
 @RestControllerAdvice(annotations = RestController.class)
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private SnakeCaseStrategy camelCaseToSnakeCase;
+    private SnakeCaseStrategy camelCaseToSnakeCase = new SnakeCaseStrategy();
     
     @ExceptionHandler(EnderecoServiceException.class)
     public ResponseEntity<Object> handleEnderecoServiceException(
@@ -47,8 +48,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatus status, 
             WebRequest request
     ) {
-        var body = new HashMap<String, ArrayList<String>>();
-        
+        var body = new HashMap<String, List<String>>();
+
         exception.getBindingResult().getFieldErrors()
             .forEach(fieldError -> {
                 var field = camelCaseToSnakeCase.translate(fieldError.getField());
@@ -56,13 +57,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 if (!body.containsKey(field)) {
                     var fieldErrors = new ArrayList<String>();
                     fieldErrors.add(fieldError.getDefaultMessage());
-                    
+
                     body.put(field, fieldErrors);
                 } else {
                     body.get(field).add(fieldError.getDefaultMessage());
                 }
             });
-
-        return ResponseEntity.badRequest().body(body); 
+        return ResponseEntity.badRequest().body(body);
     }
 }

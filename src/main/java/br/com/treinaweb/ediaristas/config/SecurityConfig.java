@@ -38,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //http.authorizeRequests().anyRequest().permitAll();
         http.authorizeRequests()
+            .antMatchers("/uploads").permitAll()
             .antMatchers("/api/**").permitAll()
             .antMatchers("/admin/**").hasAuthority(TipoUsuario.ADMIN.toString())
             .anyRequest().authenticated();

@@ -42,6 +42,7 @@ public class ApiUsuarioService {
         usuarioParaCadastrar.setSenha(senhaEncriptada);
 
         var fotoDocumento = storageService.salvar(request.getFotoDocumento());
+        System.out.println("Nome arquivo: " + fotoDocumento.getFilename());
         usuarioParaCadastrar.setFotoDocumento(fotoDocumento);
 
         var usuarioCadastrado = repository.save(usuarioParaCadastrar);

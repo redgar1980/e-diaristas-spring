@@ -17,6 +17,7 @@ public interface ApiUsuarioMapper {
     ApiUsuarioMapper INSTANCE = Mappers.getMapper(ApiUsuarioMapper.class);
 
     @Mapping(target = "senha", source = "password")
+    @Mapping(target = "fotoDocumento", ignore = true)
     Usuario toModel(UsuarioRequest request);
 
     @Mapping(target = "tipoUsuario", source = "tipoUsuario.id")
@@ -27,13 +28,6 @@ public interface ApiUsuarioMapper {
             .filter(tipoUsuario -> tipoUsuario.getId().equals(valor))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Tipo Usuário inválido"));
-        // if (valor == 1) {
-        //     return TipoUsuario.CLIENTE;
-        // } else if (valor == 2) {
-        //     return TipoUsuario.DIARISTA;
-        // } else {
-        //     throw new IllegalArgumentException("Tipo Usuário inválido");
-        // }
     }
     
 }

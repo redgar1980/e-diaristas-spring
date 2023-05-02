@@ -10,10 +10,10 @@ import org.springframework.validation.FieldError;
 import br.com.treinaweb.ediaristas.core.enums.TipoUsuario;
 import br.com.treinaweb.ediaristas.core.exceptions.SenhaIncorretaException;
 import br.com.treinaweb.ediaristas.core.exceptions.SenhasNaoConferemException;
-import br.com.treinaweb.ediaristas.core.exceptions.UsuarioJaCadastradoException;
 import br.com.treinaweb.ediaristas.core.exceptions.UsuarioNaoEncontradoException;
 import br.com.treinaweb.ediaristas.core.models.Usuario;
 import br.com.treinaweb.ediaristas.core.repositories.UsuarioRepository;
+import br.com.treinaweb.ediaristas.core.validators.UsuarioValidator;
 import br.com.treinaweb.ediaristas.web.dtos.AlterarSenhaForm;
 import br.com.treinaweb.ediaristas.web.dtos.UsuarioCadastroForm;
 import br.com.treinaweb.ediaristas.web.dtos.UsuarioEdicaoForm;
@@ -32,6 +32,9 @@ public class WebUsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UsuarioValidator validator;
+
     public List<Usuario> buscarTodos(){
         return repository.findAll();
     }
@@ -39,15 +42,7 @@ public class WebUsuarioService {
     public Usuario cadastrar(UsuarioCadastroForm form) {
         
         validarConfirmacaoSenha(form);
-        //var senha = form.getSenha();
-        //var confirmacaoSenha = form.getConfirmacaoSenha();
-        /*if(!senha.equals(confirmacaoSenha)) {
-            var mensagem = "Os dois campos de senha não conferem!";
-            var fieldError = new FieldError(form.getClass().getName(), "confirmacaoSenha", form.getConfirmacaoSenha(), false, null, null, mensagem);
-
-            throw new SenhasNaoConferemException(mensagem, fieldError);
-        }*/
-
+        
         var model = mapper.toModel(form);
         
         //Criptografar a senha, trocado pela injecao de dependencia
@@ -57,7 +52,7 @@ public class WebUsuarioService {
         model.setSenha(senhaHash);
         model.setTipoUsuario(TipoUsuario.ADMIN);
 
-        validarCamposUnicos(model);
+        validator.validar(model);
 
         return repository.save(model);
     }
@@ -90,7 +85,7 @@ public class WebUsuarioService {
         model.setSenha(usuario.getSenha());
         model.setTipoUsuario(usuario.getTipoUsuario());
 
-        validarCamposUnicos(model);
+        validator.validar(model);
 
         return repository.save(model);
         
@@ -141,23 +136,6 @@ public class WebUsuarioService {
             var fieldError = new FieldError(obj.getClass().getName(), "confirmacaoSenha", obj.getConfirmacaoSenha(), false, null, null, mensagem);
 
             throw new SenhasNaoConferemException(mensagem, fieldError);
-        }
-    }
-
-    private void validarCamposUnicos(Usuario usuario){
-        // repository.findByEmail(usuario.getEmail()).ifPresent((usuarioEncontrado) -> {
-        //     if (!usuarioEncontrado.equals(usuario)){
-        //         var mensagem = "Já existe um usuário cadastrado com esse e-mail!";
-        //         var fieldError = new FieldError(usuario.getClass().getName(), "email", usuario.getEmail(), false, null, null, mensagem);
-    
-        //         throw new UsuarioJaCadastradoException(mensagem, fieldError);
-        //     }
-        // });
-        if (repository.isEmailJaCadastrado(usuario.getEmail(), usuario.getId())) {
-            var mensagem = "Já existe um usuário cadastrado com esse e-mail!";
-            var fieldError = new FieldError(usuario.getClass().getName(), "email", usuario.getEmail(), false, null, null, mensagem);
-            
-            throw new UsuarioJaCadastradoException(mensagem, fieldError);
         }
     }
 }

@@ -80,4 +80,12 @@ public class Usuario {
         inverseJoinColumns = @JoinColumn(name = "cidade_atendida_id")
     )
     private List<CidadeAtendida> cidadesAtendidas;
+
+    public Boolean isDiarista() {
+        return tipoUsuario.equals(TipoUsuario.DIARISTA);
+    }
+
+    public Boolean isCliente() {
+        return tipoUsuario.equals(TipoUsuario.CLIENTE);
+    }
 }

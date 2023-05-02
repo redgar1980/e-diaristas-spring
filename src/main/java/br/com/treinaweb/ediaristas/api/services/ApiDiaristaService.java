@@ -3,7 +3,6 @@ package br.com.treinaweb.ediaristas.api.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import br.com.treinaweb.ediaristas.api.dtos.responses.DiaristaLocalidadesPagedResponse;

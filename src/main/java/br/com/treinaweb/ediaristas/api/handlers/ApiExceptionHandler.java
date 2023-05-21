@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 
 import br.com.treinaweb.ediaristas.api.dtos.responses.ErrorResponse;
+import br.com.treinaweb.ediaristas.core.exceptions.TokenNaBlackListException;
 import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
 import br.com.treinaweb.ediaristas.core.services.consultaendereco.exceptions.EnderecoServiceException;
 import br.com.treinaweb.ediaristas.core.services.token.exceptions.TokenServiceException;
@@ -70,6 +71,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             .build();
             
         return new ResponseEntity<Object>(errorResponse, status);
+    }
+
+    @ExceptionHandler(TokenNaBlackListException.class)
+    public ResponseEntity<Object> handleTokenNaBlackListException(
+        TokenNaBlackListException exception,
+        HttpServletRequest request
+    ) {
+        var status = HttpStatus.UNAUTHORIZED;
+        var errorResponse = ErrorResponse.builder()
+            .status(status.value())
+            .timestamp(LocalDateTime.now())
+            .mensagem(exception.getLocalizedMessage())
+            .path(request.getRequestURI())
+            .build();
+        
+        return new ResponseEntity<Object>(errorResponse, status);    
     }
 
     @Override

@@ -33,6 +33,6 @@ build/
 .vscode/
 
 ### Media ###
-uploads
+uploads/
 
 application-dev.properties

@@ -13,7 +13,7 @@ Projeto desenvolvido durante a imersão Multi Stack da [TreinaWeb](http://treina
 ## Dependências de Desenvolvimento
 
 - Spring Boot Devtools
-- Loombok
+- Lombok
 
 ## Requisitos
 

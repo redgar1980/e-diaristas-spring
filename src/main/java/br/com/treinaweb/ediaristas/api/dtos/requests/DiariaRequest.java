@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import br.com.treinaweb.ediaristas.core.validators.ServicoExistsById;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -102,5 +103,6 @@ public class DiariaRequest {
 
     @NotNull
     @Positive
+    @ServicoExistsById
     private Long servico;
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 import br.com.treinaweb.ediaristas.api.services.ApiMeService;
-import br.com.treinaweb.ediaristas.core.premissions.EDiaristasPermissions;
+import br.com.treinaweb.ediaristas.core.permissions.EDiaristasPermissions;
 
 @RestController
 @RequestMapping("/api/me")

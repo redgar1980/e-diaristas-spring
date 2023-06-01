@@ -1,4 +1,4 @@
-package br.com.treinaweb.ediaristas.core.premissions;
+package br.com.treinaweb.ediaristas.core.permissions;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,4 +13,9 @@ public @interface EDiaristasPermissions {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.METHOD)
     public @interface isDiaristaOrCliente {}
+
+    @PreAuthorize("hasAnyAuthority('CLIENTE')")
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public @interface isCliente {}
 }

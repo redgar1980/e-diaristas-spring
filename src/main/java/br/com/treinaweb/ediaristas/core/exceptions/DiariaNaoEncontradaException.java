@@ -7,4 +7,5 @@ public class DiariaNaoEncontradaException extends EntityNotFoundException{
     public DiariaNaoEncontradaException(String message) {
         super(message);
     }
+    
 }

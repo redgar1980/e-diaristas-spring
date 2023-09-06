@@ -31,7 +31,7 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
 
     @Override
     public void adicionarLinks(List<DiariaResponse> collectionResource) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'adicionarLinks'");
+        collectionResource.stream()
+            .forEach(this::adicionarLinks);
     }
 }

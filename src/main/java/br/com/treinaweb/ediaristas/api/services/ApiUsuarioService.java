@@ -60,7 +60,7 @@ public class ApiUsuarioService {
         }
 
         var usuarioCadastrado = repository.save(usuarioParaCadastrar);
-        novoUsuarioPublisher.publish(usuarioCadastrado);
+        //novoUsuarioPublisher.publish(usuarioCadastrado);
 
         var response = mapper.toCadastroResponse(usuarioCadastrado);
         var tokenResponse = gerarTokenResponse(response);

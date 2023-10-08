@@ -18,12 +18,12 @@ import br.com.treinaweb.ediaristas.api.services.ApiAuthService;
 @RestController
 @RequestMapping("/auth")
 public class AuthRestController {
-    
+
     @Autowired
     private ApiAuthService service;
 
     @PostMapping("/token")
-    public TokenResponse autenticar(@RequestBody @Valid TokenRequest tokenRequest){
+    public TokenResponse autenticar(@RequestBody @Valid TokenRequest tokenRequest) {
         return service.autenticar(tokenRequest);
     }
 

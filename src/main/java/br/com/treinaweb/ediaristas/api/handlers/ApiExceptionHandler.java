@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import br.com.treinaweb.ediaristas.api.dtos.responses.ErrorResponse;
 import br.com.treinaweb.ediaristas.core.exceptions.TokenNaBlackListException;
 import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
+import br.com.treinaweb.ediaristas.core.services.consultacidade.exceptions.ConsultaCidadeException;
 import br.com.treinaweb.ediaristas.core.services.consultaendereco.exceptions.EnderecoServiceException;
 import br.com.treinaweb.ediaristas.core.services.token.exceptions.TokenServiceException;
 
@@ -31,16 +32,15 @@ import br.com.treinaweb.ediaristas.core.services.token.exceptions.TokenServiceEx
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private SnakeCaseStrategy camelCaseToSnakeCase = new SnakeCaseStrategy();
-    
+
     @ExceptionHandler(EnderecoServiceException.class)
     public ResponseEntity<Object> handleEnderecoServiceException(
-        EnderecoServiceException exception, HttpServletRequest request
-        ) {
-            
-           return criarErrorResponse(
-            HttpStatus.BAD_REQUEST, 
-            exception.getLocalizedMessage(), 
-            request.getRequestURI());
+            EnderecoServiceException exception, HttpServletRequest request) {
+
+        return criarErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                exception.getLocalizedMessage(),
+                request.getRequestURI());
     }
 
     @ExceptionHandler(ValidacaoException.class)
@@ -59,74 +59,75 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(TokenServiceException.class)
     public ResponseEntity<Object> handleTokenServiceException(
-        TokenServiceException exception, HttpServletRequest request
-    ) {
+            TokenServiceException exception, HttpServletRequest request) {
         return criarErrorResponse(
-            HttpStatus.UNAUTHORIZED, 
-            exception.getLocalizedMessage(), 
-            request.getRequestURI());
+                HttpStatus.UNAUTHORIZED,
+                exception.getLocalizedMessage(),
+                request.getRequestURI());
     }
 
     @ExceptionHandler(TokenNaBlackListException.class)
     public ResponseEntity<Object> handleTokenNaBlackListException(
-        TokenNaBlackListException exception,
-        HttpServletRequest request
-    ) {
+            TokenNaBlackListException exception,
+            HttpServletRequest request) {
         return criarErrorResponse(
-            HttpStatus.UNAUTHORIZED, 
-            exception.getLocalizedMessage(), 
-            request.getRequestURI());    
+                HttpStatus.UNAUTHORIZED,
+                exception.getLocalizedMessage(),
+                request.getRequestURI());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(
-        EntityNotFoundException exception, HttpServletRequest request
-     ) {
+            EntityNotFoundException exception, HttpServletRequest request) {
         return criarErrorResponse(HttpStatus.NOT_FOUND, exception.getLocalizedMessage(), request.getRequestURI());
-     }
+    }
+
+    @ExceptionHandler(ConsultaCidadeException.class)
+    public ResponseEntity<Object> handleConsultaCidadeException(
+            ConsultaCidadeException exception, HttpServletRequest request) {
+        return criarErrorResponse(HttpStatus.NOT_FOUND, exception.getLocalizedMessage(), request.getRequestURI());
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException exception,
-            HttpHeaders headers, 
-            HttpStatus status, 
-            WebRequest request
-    ) {
+            HttpHeaders headers,
+            HttpStatus status,
+            WebRequest request) {
         return handleBindException(exception, headers, status, request);
     }
 
     @Override
     protected ResponseEntity<Object> handleBindException(
-            BindException exception, 
-            HttpHeaders headers, 
+            BindException exception,
+            HttpHeaders headers,
             HttpStatus status,
-            WebRequest request
-    ) {
+            WebRequest request) {
         var body = new HashMap<String, List<String>>();
 
         exception.getBindingResult().getFieldErrors()
-            .forEach(fieldError -> {
-                var field = camelCaseToSnakeCase.translate(fieldError.getField());
+                .forEach(fieldError -> {
+                    var field = camelCaseToSnakeCase.translate(fieldError.getField());
 
-                if (!body.containsKey(field)) {
-                    var fieldErrors = new ArrayList<String>();
-                    fieldErrors.add(fieldError.getDefaultMessage());
+                    if (!body.containsKey(field)) {
+                        var fieldErrors = new ArrayList<String>();
+                        fieldErrors.add(fieldError.getDefaultMessage());
 
-                    body.put(field, fieldErrors);
-                } else {
-                    body.get(field).add(fieldError.getDefaultMessage());
-                }
-            });
+                        body.put(field, fieldErrors);
+                    } else {
+                        body.get(field).add(fieldError.getDefaultMessage());
+                    }
+                });
         return ResponseEntity.badRequest().body(body);
     }
 
     private ResponseEntity<Object> criarErrorResponse(HttpStatus status, String mensagem, String path) {
         var errorResponse = ErrorResponse.builder()
-            .status(status.value())
-            .timestamp(LocalDateTime.now())
-            .mensagem(mensagem)
-            .path(path)
-            .build();
+                .status(status.value())
+                .timestamp(LocalDateTime.now())
+                .mensagem(mensagem)
+                .path(path)
+                .build();
         return new ResponseEntity<>(errorResponse, status);
     }
 }

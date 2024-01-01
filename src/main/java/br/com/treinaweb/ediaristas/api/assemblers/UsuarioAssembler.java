@@ -10,50 +10,58 @@ import org.springframework.stereotype.Component;
 import br.com.treinaweb.ediaristas.api.controllers.CidadesAtendidasRestController;
 import br.com.treinaweb.ediaristas.api.controllers.DiariaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.EnderecoDiaristaRestController;
+import br.com.treinaweb.ediaristas.api.controllers.OportunidadeRestController;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 
 @Component
 public class UsuarioAssembler implements Assembler<UsuarioResponse> {
 
-    @Override
-    public void adicionarLinks(UsuarioResponse resource) {
-        if (resource.isCliente()) {
-            var cadastrarDiariaLink = linkTo(methodOn(DiariaRestController.class).cadastrar(null))
-                    .withRel("cadastrar_diaria")
-                    .withType("POST");
+        @Override
+        public void adicionarLinks(UsuarioResponse resource) {
+                if (resource.isCliente()) {
+                        var cadastrarDiariaLink = linkTo(methodOn(DiariaRestController.class).cadastrar(null))
+                                        .withRel("cadastrar_diaria")
+                                        .withType("POST");
 
-            resource.adicionarLinks(cadastrarDiariaLink);
-        } else {
-            var atualizarEnderecoLink = linkTo(methodOn(EnderecoDiaristaRestController.class).alterarEndereco(null))
-                    .withRel("atualizar_endereco")
-                    .withType("PUT");
+                        resource.adicionarLinks(cadastrarDiariaLink);
+                } else {
+                        var atualizarEnderecoLink = linkTo(
+                                        methodOn(EnderecoDiaristaRestController.class).alterarEndereco(null))
+                                        .withRel("atualizar_endereco")
+                                        .withType("PUT");
 
-            var listarEnderecoLink = linkTo(methodOn(EnderecoDiaristaRestController.class).exibirEndereco())
-                    .withRel("listar_endereco")
-                    .withType("GET");
+                        var listarEnderecoLink = linkTo(methodOn(EnderecoDiaristaRestController.class).exibirEndereco())
+                                        .withRel("listar_endereco")
+                                        .withType("GET");
 
-            var relacionarCidadesLink = linkTo(
-                    methodOn(CidadesAtendidasRestController.class).atualizarCidadesAtendidas(null))
-                    .withRel("listar_endereco")
-                    .withType("PUT");
+                        var relacionarCidadesLink = linkTo(
+                                        methodOn(CidadesAtendidasRestController.class).atualizarCidadesAtendidas(null))
+                                        .withRel("listar_endereco")
+                                        .withType("PUT");
 
-            var cidadesAtendidasLink = linkTo(methodOn(CidadesAtendidasRestController.class).listarCidadesAtendidas())
-                    .withRel("cidades_atendidas")
-                    .withType("GET");
+                        var cidadesAtendidasLink = linkTo(
+                                        methodOn(CidadesAtendidasRestController.class).listarCidadesAtendidas())
+                                        .withRel("cidades_atendidas")
+                                        .withType("GET");
 
-            resource.adicionarLinks(atualizarEnderecoLink, listarEnderecoLink, relacionarCidadesLink,
-                    cidadesAtendidasLink);
+                        var listaOportunidadesLink = linkTo(
+                                        methodOn(OportunidadeRestController.class).buscarOportunidades())
+                                        .withRel("lista_oportunidades")
+                                        .withType("GET");
+
+                        resource.adicionarLinks(atualizarEnderecoLink, listarEnderecoLink, relacionarCidadesLink,
+                                        cidadesAtendidasLink, listaOportunidadesLink);
+                }
+
+                var listaDiariasLink = linkTo(methodOn(DiariaRestController.class).listarPorUsuarioLogado())
+                                .withRel("listar_diarias")
+                                .withType("GET");
+
+                resource.adicionarLinks(listaDiariasLink);
         }
 
-        var listaDiariasLink = linkTo(methodOn(DiariaRestController.class).listarPorUsuarioLogado())
-                .withRel("listar_diarias")
-                .withType("GET");
-
-        resource.adicionarLinks(listaDiariasLink);
-    }
-
-    @Override
-    public void adicionarLinks(List<UsuarioResponse> collectionResource) {
-    }
+        @Override
+        public void adicionarLinks(List<UsuarioResponse> collectionResource) {
+        }
 
 }

@@ -24,14 +24,15 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
         var id = resource.getId();
         if (securityUtils.isCliente() && resource.isSemPagamento()) {
             var pagarDiariaLink = linkTo(methodOn(DiariaPagamentoRestController.class).pagar(null, id))
-                .withRel("pagar_diaria")
-                .withType("POST");
+                    .withRel("pagar_diaria")
+                    .withType("POST");
+
             resource.adicionarLinks(pagarDiariaLink);
         }
-        
+
         var selfLink = linkTo(methodOn(DiariaRestController.class).buscarPorId(id))
-            .withSelfRel()
-            .withType("GET");
+                .withSelfRel()
+                .withType("GET");
 
         resource.adicionarLinks(selfLink);
     }
@@ -39,6 +40,6 @@ public class DiariaAssembler implements Assembler<DiariaResponse> {
     @Override
     public void adicionarLinks(List<DiariaResponse> collectionResource) {
         collectionResource.stream()
-            .forEach(this::adicionarLinks);
+                .forEach(this::adicionarLinks);
     }
 }

@@ -83,6 +83,19 @@ public class CandidaturaValidator {
                     mensagem);
             throw new ValidacaoException(mensagem, fieldError);
         }
+
+        validarDiaristaDiaria(diaria);
+    }
+
+    private void validarDiaristaDiaria(Diaria diaria) {
+        var diarista = diaria.getDiarista();
+
+        if (diarista != null) {
+            var mensagem = "Diária já possui um diarista";
+            var fieldError = new FieldError(diaria.getClass().getName(), "diarista", null, false, null, null,
+                    mensagem);
+            throw new ValidacaoException(mensagem, fieldError);
+        }
     }
 
 }

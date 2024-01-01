@@ -1,5 +1,7 @@
 package br.com.treinaweb.ediaristas.core.validators;
 
+import java.time.LocalDateTime;
+
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +66,20 @@ public class CandidaturaValidator {
         if (!diaria.isPago()) {
             var mensagem = "Diaria não está com o status PAGO";
             var fieldError = new FieldError(diaria.getClass().getName(), "status", null, false, null, null,
+                    mensagem);
+            throw new ValidacaoException(mensagem, fieldError);
+        }
+
+        validarDataAtendimentoDiaria(diaria);
+    }
+
+    private void validarDataAtendimentoDiaria(Diaria diaria) {
+        var hoje = LocalDateTime.now();
+        var dataAtendimento = diaria.getDataAtendimento();
+
+        if (hoje.isAfter(dataAtendimento)) {
+            var mensagem = "Diária com data de atendimento no passado";
+            var fieldError = new FieldError(diaria.getClass().getName(), "dataAtendimento", null, false, null, null,
                     mensagem);
             throw new ValidacaoException(mensagem, fieldError);
         }

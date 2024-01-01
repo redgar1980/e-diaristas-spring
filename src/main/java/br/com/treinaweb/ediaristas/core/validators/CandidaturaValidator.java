@@ -29,6 +29,20 @@ public class CandidaturaValidator {
                     mensagem);
             throw new ValidacaoException(mensagem, fieldError);
         }
+
+        validarDuplicidadeCandidato(diaria);
+    }
+
+    private void validarDuplicidadeCandidato(Diaria diaria) {
+        var candidato = securityUtils.getUsuarioLogado();
+        var candidatos = diaria.getCandidatos();
+
+        if (candidatos.contains(candidato)) {
+            var mensagem = "Diarista já se candidatou para essa diária";
+            var fieldError = new FieldError(diaria.getClass().getName(), "candidatos", null, false, null, null,
+                    mensagem);
+            throw new ValidacaoException(mensagem, fieldError);
+        }
     }
 
 }

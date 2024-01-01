@@ -56,6 +56,17 @@ public class CandidaturaValidator {
                     mensagem);
             throw new ValidacaoException(mensagem, fieldError);
         }
+
+        validarStatusDiaria(diaria);
+    }
+
+    private void validarStatusDiaria(Diaria diaria) {
+        if (!diaria.isPago()) {
+            var mensagem = "Diaria não está com o status PAGO";
+            var fieldError = new FieldError(diaria.getClass().getName(), "status", null, false, null, null,
+                    mensagem);
+            throw new ValidacaoException(mensagem, fieldError);
+        }
     }
 
 }

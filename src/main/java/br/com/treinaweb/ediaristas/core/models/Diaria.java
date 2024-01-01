@@ -115,16 +115,17 @@ public class Diaria extends Auditable {
     private Servico servico;
 
     @ManyToMany
-    @JoinTable(
-        name = "diaria_candidato",
-        joinColumns = @JoinColumn(name = "diaria_id"),
-        inverseJoinColumns = @JoinColumn(name = "candidato_id")
+    @JoinTable(name = "diaria_candidato", joinColumns = @JoinColumn(name = "diaria_id"), inverseJoinColumns = @JoinColumn(name = "candidato_id")
 
     )
     private List<Usuario> candidatos;
 
     public Boolean isSemPagamento() {
         return status.equals(DiariaStatus.SEM_PAGAMENTO);
+    }
+
+    public Boolean isPago() {
+        return status.equals(DiariaStatus.PAGO);
     }
 
 }

@@ -146,6 +146,9 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<compilerArguments>
+                    	<Xlint:unchecked/>
+                	</compilerArguments>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>

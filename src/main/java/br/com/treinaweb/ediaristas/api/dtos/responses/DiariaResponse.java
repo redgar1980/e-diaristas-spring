@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @JsonNaming(SnakeCaseStrategy.class)
 public class DiariaResponse extends HateoasResponse {
-    
+
     private Long id;
 
     private Integer status;
@@ -75,6 +75,11 @@ public class DiariaResponse extends HateoasResponse {
     @JsonIgnore
     public Boolean isSemPagamento() {
         return status.equals(DiariaStatus.SEM_PAGAMENTO.getId());
+    }
+
+    @JsonIgnore
+    public Boolean isConfirmado() {
+        return status.equals(DiariaStatus.CONFIRMADO.getId());
     }
 
 }

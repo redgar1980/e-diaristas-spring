@@ -13,6 +13,7 @@ import br.com.treinaweb.ediaristas.core.models.Usuario;
 import br.com.treinaweb.ediaristas.core.repositories.AvaliacaoRepository;
 import br.com.treinaweb.ediaristas.core.repositories.DiariaRepository;
 import br.com.treinaweb.ediaristas.core.utils.SecurityUtils;
+import br.com.treinaweb.ediaristas.core.validators.AvaliacaoValidator;
 
 @Service
 public class ApiAvaliacaoService {
@@ -29,6 +30,9 @@ public class ApiAvaliacaoService {
     @Autowired
     private ApiAvaliacaoMapper mapper;
 
+    @Autowired
+    private AvaliacaoValidator validator;
+
     public MensagemResponse avaliarDiaria(AvaliacaoRequest request, Long id) {
         var diaria = buscarDiariaPorId(id);
         var avaliador = securityUtils.getUsuarioLogado();
@@ -38,6 +42,8 @@ public class ApiAvaliacaoService {
         model.setDiaria(diaria);
         model.setVisibilidade(true);
         model.setAvaliado(getAvaliado(model));
+
+        validator.validar(model);
 
         repository.save(model);
 

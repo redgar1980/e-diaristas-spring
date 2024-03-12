@@ -2,8 +2,6 @@ package br.com.treinaweb.ediaristas.core.validators;
 
 import java.time.LocalDateTime;
 
-import javax.validation.ValidationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;

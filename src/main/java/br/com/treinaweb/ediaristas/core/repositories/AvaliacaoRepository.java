@@ -21,4 +21,14 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             """)
     Double getAvaliacaoMedia(Usuario usuario);
 
+    @Query("""
+            SELECT
+                COUNT(*) = 2
+            FROM
+                Avaliacao a
+            WHERE
+                a.diaria = :diaria
+            """)
+    boolean isClienteAndDiaristaAvaliaramDiaria(Diaria diaria);
+
 }

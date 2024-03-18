@@ -21,7 +21,7 @@ public class ScheduledTask {
 	@Autowired
 	private DiaristaIndiceService diaristaIndiceService;
 
-	@Scheduled(cron = "0/10 * * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	@Transactional(readOnly = false)
 	public void selecionarDiaristaDaDiaria() {
 		log.info("Iniciada task de seleção de diaristas para diárias pagas");
@@ -30,7 +30,7 @@ public class ScheduledTask {
 
 		diariasAptasParaSelecao.stream().forEach(this::selecionarDiarista);
 
-		log.info("Task de seleção de diarista finanlizada");
+		log.info("Task de seleção de diarista finalizada");
 	}
 
 	private void selecionarDiarista(Diaria diaria) {

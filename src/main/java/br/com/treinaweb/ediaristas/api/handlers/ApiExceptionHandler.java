@@ -26,6 +26,7 @@ import br.com.treinaweb.ediaristas.core.exceptions.TokenNaBlackListException;
 import br.com.treinaweb.ediaristas.core.exceptions.ValidacaoException;
 import br.com.treinaweb.ediaristas.core.services.consultacidade.exceptions.ConsultaCidadeException;
 import br.com.treinaweb.ediaristas.core.services.consultaendereco.exceptions.EnderecoServiceException;
+import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.exceptions.GatewayPagamentoException;
 import br.com.treinaweb.ediaristas.core.services.token.exceptions.TokenServiceException;
 
 @RestControllerAdvice(annotations = RestController.class)
@@ -95,6 +96,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatus status,
             WebRequest request) {
         return handleBindException(exception, headers, status, request);
+    }
+
+    public ResponseEntity<Object> hadleGatewayPagamentoException(GatewayPagamentoException exception,
+            HttpServletRequest request) {
+        return criarErrorResponse(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), request.getRequestURI());
     }
 
     @Override

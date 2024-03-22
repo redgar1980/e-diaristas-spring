@@ -6,4 +6,6 @@ import br.com.treinaweb.ediaristas.core.models.Pagamento;
 public interface GatewayPagamentoService {
 
     Pagamento pagar(Diaria diaria, String cardHash);
+
+    Pagamento realizarEstornoTotal(Diaria diaria);
 }

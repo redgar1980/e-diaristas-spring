@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.ManyToAny;
-
 import br.com.treinaweb.ediaristas.core.enums.PagamentoStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;

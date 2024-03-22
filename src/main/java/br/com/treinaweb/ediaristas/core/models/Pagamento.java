@@ -47,4 +47,8 @@ public class Pagamento extends Auditable {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Diaria diaria;
+
+    public boolean isAceito() {
+        return status.equals(PagamentoStatus.ACEITO);
+    }
 }

@@ -10,9 +10,12 @@ import br.com.treinaweb.ediaristas.api.dtos.requests.DiariaCancelamentoRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.MensagemResponse;
 import br.com.treinaweb.ediaristas.core.enums.DiariaStatus;
 import br.com.treinaweb.ediaristas.core.exceptions.DiariaNaoEncontradaException;
+import br.com.treinaweb.ediaristas.core.models.Avaliacao;
 import br.com.treinaweb.ediaristas.core.models.Diaria;
+import br.com.treinaweb.ediaristas.core.repositories.AvaliacaoRepository;
 import br.com.treinaweb.ediaristas.core.repositories.DiariaRepository;
 import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.adapters.GatewayPagamentoService;
+import br.com.treinaweb.ediaristas.core.utils.SecurityUtils;
 import br.com.treinaweb.ediaristas.core.validators.DiariaCancelamentoValidador;
 
 @Service
@@ -26,6 +29,12 @@ public class ApiDiariaCancelamentoService {
 
     @Autowired
     private GatewayPagamentoService gatewayPagamentoService;
+
+    @Autowired
+    private SecurityUtils securityUtils;
+
+    @Autowired
+    private AvaliacaoRepository avaliacaoRepository;
 
     public MensagemResponse cancelar(Long diariaId, DiariaCancelamentoRequest request) {
         var diaria = buscarDiariaPorId(diariaId);
@@ -45,8 +54,22 @@ public class ApiDiariaCancelamentoService {
     }
 
     private void aplicarPenalizacao(Diaria diaria) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'aplicarPenalizacao'");
+        var usuarioLogado = securityUtils.getUsuarioLogado();
+        if (usuarioLogado.isDiarista()) {
+            penalizarDiarista(diaria);
+            gatewayPagamentoService.realizarEstornoTotal(diaria);
+        }
+    }
+
+    private void penalizarDiarista(Diaria diaria) {
+        var avaliacao = Avaliacao.builder()
+                .nota(1.0)
+                .descricao("Penalização diária cancelada")
+                .visibilidade(false)
+                .diaria(diaria)
+                .build();
+        if (avaliacao != null)
+            avaliacaoRepository.save(avaliacao);
     }
 
     private Diaria buscarDiariaPorId(Long diariaId) {

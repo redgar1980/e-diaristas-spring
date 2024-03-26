@@ -19,6 +19,7 @@ import br.com.treinaweb.ediaristas.core.models.Pagamento;
 import br.com.treinaweb.ediaristas.core.repositories.PagamentoRepository;
 import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.adapters.GatewayPagamentoService;
 import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.exceptions.GatewayPagamentoException;
+import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.providers.dtos.PagarMeReembolsoRequest;
 import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.providers.dtos.PagarMeReembolsoResponse;
 import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.providers.dtos.PagarMeTransacaoRequest;
 import br.com.treinaweb.ediaristas.core.services.gatewaypagamento.providers.dtos.PagarMeTransacaoResponse;
@@ -65,20 +66,44 @@ public class PagarMeService implements GatewayPagamentoService {
 
     }
 
+    @Override
+    public Pagamento realizarEstornoParcial(Diaria diaria) {
+        try {
+            return tryRealizarEstornoParcial(diaria);
+        } catch (HttpClientErrorException exception) {
+            throw new GatewayPagamentoException(exception.getLocalizedMessage());
+        }
+    }
+
+    private Pagamento tryRealizarEstornoParcial(Diaria diaria) {
+        var request = PagarMeReembolsoRequest.builder()
+                .amount(converterReaisParaCentavos(diaria.getPreco().divide(new BigDecimal(2))))
+                .apiKey(apiKey)
+                .build();
+        return realizarEstorno(diaria, request);
+    }
+
+    // https://docs.pagar.me/v1/reference/estorno-de-transação
+    // POST https://api.pagar.me/1/transactions/{transaction_id}/refund
     private Pagamento tryRealizarEstornoTotal(Diaria diaria) {
-        // https://docs.pagar.me/v1/reference/estorno-de-transação
-        // POST https://api.pagar.me/1/transactions/{transaction_id}/refund
+        var request = PagarMeReembolsoRequest.builder()
+                .apiKey(apiKey)
+                .build();
+        return realizarEstorno(diaria, request);
+    }
+
+    private Pagamento realizarEstorno(Diaria diaria, PagarMeReembolsoRequest request) {
         validarDiariaParaReembolso(diaria);
         var pagamento = getPagamentoDaDiaria(diaria);
         var url = BASE_URL + "transactions/{transaction_id}/refund";
-        var request = PagarMeTransacaoRequest.builder().apiKey(apiKey).build();
         var response = clienteHttp.postForEntity(url, request, PagarMeReembolsoResponse.class,
                 pagamento.getTransacaoId());
         return criarPagamento(diaria, response.getBody());
     }
 
     private void validarDiariaParaReembolso(Diaria diaria) {
-        if (!diaria.isPago()) {
+        var isNotPagaOrNotConfirmada = !(diaria.isPago() || diaria.isConfirmado());
+        if (isNotPagaOrNotConfirmada) {
             throw new IllegalArgumentException("Não pode ser feito reembolso de diárias que não foram pagas");
         }
     }

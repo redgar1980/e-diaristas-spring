@@ -11,6 +11,7 @@ import br.com.treinaweb.ediaristas.api.controllers.CidadesAtendidasRestControlle
 import br.com.treinaweb.ediaristas.api.controllers.DiariaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.EnderecoDiaristaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.OportunidadeRestController;
+import br.com.treinaweb.ediaristas.api.controllers.PagamentoRestController;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 
 @Component
@@ -19,7 +20,8 @@ public class UsuarioAssembler implements Assembler<UsuarioResponse> {
         @Override
         public void adicionarLinks(UsuarioResponse resource) {
                 if (resource.isCliente()) {
-                        var cadastrarDiariaLink = linkTo(methodOn(DiariaRestController.class).cadastrar(null))
+                        var cadastrarDiariaLink = linkTo(
+                                        methodOn(DiariaRestController.class).cadastrar(null))
                                         .withRel("cadastrar_diaria")
                                         .withType("POST");
 
@@ -36,7 +38,7 @@ public class UsuarioAssembler implements Assembler<UsuarioResponse> {
 
                         var relacionarCidadesLink = linkTo(
                                         methodOn(CidadesAtendidasRestController.class).atualizarCidadesAtendidas(null))
-                                        .withRel("listar_endereco")
+                                        .withRel("relacionar_cidades")
                                         .withType("PUT");
 
                         var cidadesAtendidasLink = linkTo(
@@ -48,9 +50,18 @@ public class UsuarioAssembler implements Assembler<UsuarioResponse> {
                                         methodOn(OportunidadeRestController.class).buscarOportunidades())
                                         .withRel("lista_oportunidades")
                                         .withType("GET");
+                        var listaPagamentosLink = linkTo(
+                                        methodOn(PagamentoRestController.class).listarPagamentos())
+                                        .withRel("lista_pagamentos")
+                                        .withType("GET");
 
-                        resource.adicionarLinks(atualizarEnderecoLink, listarEnderecoLink, relacionarCidadesLink,
-                                        cidadesAtendidasLink, listaOportunidadesLink);
+                        resource.adicionarLinks(
+                                        atualizarEnderecoLink,
+                                        listarEnderecoLink,
+                                        relacionarCidadesLink,
+                                        cidadesAtendidasLink,
+                                        listaOportunidadesLink,
+                                        listaPagamentosLink);
                 }
 
                 var listaDiariasLink = linkTo(methodOn(DiariaRestController.class).listarPorUsuarioLogado())

@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @JsonNaming(SnakeCaseStrategy.class)
-public class UsuarioResponse extends HateoasResponse{
-    
+public class UsuarioResponse extends HateoasResponse {
+
     private Long id;
     private String nomeCompleto;
     private String email;
@@ -27,9 +27,10 @@ public class UsuarioResponse extends HateoasResponse{
     private LocalDate nascimento;
     private String telefone;
     private String chavePix;
+    private String fotoUsuario;
 
     @JsonIgnore
-    public Boolean isCliente(){        
+    public Boolean isCliente() {
         return tipoUsuario.equals(TipoUsuario.CLIENTE.getId());
     }
 }

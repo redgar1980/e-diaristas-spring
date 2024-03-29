@@ -1,6 +1,5 @@
 package br.com.treinaweb.ediaristas.core.services.storage.providers;
 
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -25,7 +24,7 @@ import br.com.treinaweb.ediaristas.core.services.storage.exceptions.StorageServi
 
 @Service
 public class LocalStorageService implements StorageService {
-    
+
     private final Path pastaUpload = Paths.get("uploads");
 
     @Autowired
@@ -35,6 +34,16 @@ public class LocalStorageService implements StorageService {
     public Foto salvar(MultipartFile file) throws StorageServiceException {
         try {
             return trySalvar(file);
+        } catch (IOException exception) {
+            throw new StorageServiceException(exception.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void apagar(String filename) throws StorageServiceException {
+        var arquivo = pastaUpload.resolve(filename);
+        try {
+            Files.deleteIfExists(arquivo);
         } catch (IOException exception) {
             throw new StorageServiceException(exception.getLocalizedMessage());
         }

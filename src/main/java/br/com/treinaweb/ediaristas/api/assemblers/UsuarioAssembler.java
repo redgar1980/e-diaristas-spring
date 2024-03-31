@@ -12,6 +12,7 @@ import br.com.treinaweb.ediaristas.api.controllers.DiariaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.EnderecoDiaristaRestController;
 import br.com.treinaweb.ediaristas.api.controllers.OportunidadeRestController;
 import br.com.treinaweb.ediaristas.api.controllers.PagamentoRestController;
+import br.com.treinaweb.ediaristas.api.controllers.UsuarioRestController;
 import br.com.treinaweb.ediaristas.api.dtos.responses.UsuarioResponse;
 
 @Component
@@ -68,7 +69,11 @@ public class UsuarioAssembler implements Assembler<UsuarioResponse> {
                                 .withRel("listar_diarias")
                                 .withType("GET");
 
-                resource.adicionarLinks(listaDiariasLink);
+                var alterarFotoUsuarioLink = linkTo(methodOn(UsuarioRestController.class).atualizarFotoUsuario(null))
+                                .withRel("alterar_foto_usuario")
+                                .withType("POST");
+
+                resource.adicionarLinks(listaDiariasLink, alterarFotoUsuarioLink);
         }
 
         @Override

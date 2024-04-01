@@ -21,26 +21,24 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Boolean existsByCidadesAtendidasCodigoIbge(String codigoIbge);
 
-    @Query(
-        """
-        SELECT
-            AVG(u.reputacao)
-        FROM
-            Usuario u
-        WHERE
-            u.tipoUsuario = 'DIARISTA'
-        """
-    )
+    @Query("""
+            SELECT
+                AVG(u.reputacao)
+            FROM
+                Usuario u
+            WHERE
+                u.tipoUsuario = 'DIARISTA'
+            """)
     Double getMediaReputacaoDiarista();
-    
+
     default Boolean isEmailJaCadastrado(Usuario usuario) {
         if (usuario.getEmail() == null) {
             return false;
         }
 
         return findByEmail(usuario.getEmail())
-            .map(usuarioEncontrado -> !usuarioEncontrado.getId().equals(usuario.getId()))
-            .orElse(false);
+                .map(usuarioEncontrado -> !usuarioEncontrado.getId().equals(usuario.getId()))
+                .orElse(false);
 
     };
 
@@ -50,20 +48,22 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
         }
 
         return findByCpf(usuario.getCpf())
-            .map(usuarioEncontrado -> !usuarioEncontrado.getId().equals(usuario.getId()))
-            .orElse(false);
+                .map(usuarioEncontrado -> !usuarioEncontrado.getId().equals(usuario.getId()))
+                .orElse(false);
 
     };
-    
+
     default Boolean isChavePixJaCadastrada(Usuario usuario) {
         if (usuario.getChavePix() == null) {
             return false;
         }
 
         return findByChavePix(usuario.getChavePix())
-            .map(usuarioEncontrado -> !usuarioEncontrado.getId().equals(usuario.getId()))
-            .orElse(false);
+                .map(usuarioEncontrado -> !usuarioEncontrado.getId().equals(usuario.getId()))
+                .orElse(false);
 
-    };
-    
+    }
+
+    boolean existsByEmail(String email);;
+
 }

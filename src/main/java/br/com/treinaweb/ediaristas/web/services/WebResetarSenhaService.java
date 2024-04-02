@@ -36,7 +36,7 @@ public class WebResetarSenhaService {
             var emailParams = EmailParams.builder()
                     .destinatario(form.getEmail())
                     .assunto("Solicitação de reset de senha")
-                    .template("email/resetar-senha")
+                    .template("emails/resetar-senha")
                     .props(props)
                     .build();
             emailService.enviarEmailComTemplateHtml(emailParams);

@@ -14,7 +14,6 @@ import br.com.treinaweb.ediaristas.core.exceptions.SenhasNaoConferemException;
 import br.com.treinaweb.ediaristas.core.services.PasswordResetService;
 import br.com.treinaweb.ediaristas.core.services.email.adapters.EmailService;
 import br.com.treinaweb.ediaristas.core.services.email.dtos.EmailParams;
-import lombok.extern.java.Log;
 
 @Service
 public class ApiResetSenhaService {

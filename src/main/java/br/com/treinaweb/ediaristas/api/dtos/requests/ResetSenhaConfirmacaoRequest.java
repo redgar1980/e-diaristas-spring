@@ -28,7 +28,7 @@ public class ResetSenhaConfirmacaoRequest {
 
     @NotNull
     @NotEmpty
-    private String passwordConfirmantion;
+    private String passwordConfirmation;
 
     @NotNull
     @NotEmpty

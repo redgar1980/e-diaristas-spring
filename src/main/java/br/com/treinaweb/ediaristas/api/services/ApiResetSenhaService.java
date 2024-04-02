@@ -5,12 +5,16 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
+import br.com.treinaweb.ediaristas.api.dtos.requests.ResetSenhaConfirmacaoRequest;
 import br.com.treinaweb.ediaristas.api.dtos.requests.ResetSenhaRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.MensagemResponse;
+import br.com.treinaweb.ediaristas.core.exceptions.SenhasNaoConferemException;
 import br.com.treinaweb.ediaristas.core.services.PasswordResetService;
 import br.com.treinaweb.ediaristas.core.services.email.adapters.EmailService;
 import br.com.treinaweb.ediaristas.core.services.email.dtos.EmailParams;
+import lombok.extern.java.Log;
 
 @Service
 public class ApiResetSenhaService {
@@ -27,6 +31,8 @@ public class ApiResetSenhaService {
     public MensagemResponse solicitarResetSenha(ResetSenhaRequest request) {
         var passwordReset = passwordResetService.criarPasswordReset(request.getEmail());
 
+        System.out.println("TOKEN ****************: " + passwordReset.getToken());
+
         if (passwordReset != null) {
             var props = new HashMap<String, Object>();
             props.put("link",
@@ -40,6 +46,25 @@ public class ApiResetSenhaService {
             emailService.enviarEmailComTemplateHtml(emailParams);
         }
         return new MensagemResponse("Verifique o seu e-mail para ter acesso ao link de reset de senha");
+    }
+
+    public MensagemResponse confirmarResetDeSenha(ResetSenhaConfirmacaoRequest request) {
+        validarConfirmacaoSenha(request);
+        passwordResetService.resetarSenha(request.getToken(), request.getPassword());
+        return new MensagemResponse("Senha alterada com sucesso");
+    }
+
+    private void validarConfirmacaoSenha(ResetSenhaConfirmacaoRequest request) {
+        var senha = request.getPassword();
+        var confirmacaoSenha = request.getPasswordConfirmation();
+
+        if (!senha.equals(confirmacaoSenha)) {
+            var mensagem = "Os dois campos de senha não conferem";
+            var fieldError = new FieldError(request.getClass().getName(), "confirmacaoSenha",
+                    request.getPasswordConfirmation(),
+                    false, null, null, mensagem);
+            throw new SenhasNaoConferemException(mensagem, fieldError);
+        }
     }
 
 }

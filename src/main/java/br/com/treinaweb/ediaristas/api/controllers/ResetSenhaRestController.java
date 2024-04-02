@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.treinaweb.ediaristas.api.dtos.requests.ResetSenhaConfirmacaoRequest;
 import br.com.treinaweb.ediaristas.api.dtos.requests.ResetSenhaRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.MensagemResponse;
 import br.com.treinaweb.ediaristas.api.services.ApiResetSenhaService;
@@ -22,5 +23,10 @@ public class ResetSenhaRestController {
     @PostMapping
     public MensagemResponse solicitarResetDeSenha(@RequestBody @Valid ResetSenhaRequest request) {
         return service.solicitarResetSenha(request);
+    }
+
+    @PostMapping("/confirm")
+    public MensagemResponse confirmarResetDeSenha(@RequestBody @Valid ResetSenhaConfirmacaoRequest request) {
+        return service.confirmarResetDeSenha(request);
     }
 }

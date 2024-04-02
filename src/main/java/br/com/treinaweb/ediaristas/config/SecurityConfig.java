@@ -26,81 +26,81 @@ import br.com.treinaweb.ediaristas.core.filters.AccessTokenRequestFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Value("${br.com.treinaweb.ediaristas.rememberMe.key}")
-    private String rememberMeKey;
+        @Value("${br.com.treinaweb.ediaristas.rememberMe.key}")
+        private String rememberMeKey;
 
-    @Value("${br.com.treinaweb.ediaristas.rememberMe.validitySeconds}")
-    private int rememberMeValiditySeconds;
+        @Value("${br.com.treinaweb.ediaristas.rememberMe.validitySeconds}")
+        private int rememberMeValiditySeconds;
 
-    @Autowired
-    private AccessTokenRequestFilter accessTokenRequestFilter;
+        @Autowired
+        private AccessTokenRequestFilter accessTokenRequestFilter;
 
-    @Autowired
-    private AuthenticationEntryPoint authenticationEntryPoint;
+        @Autowired
+        private AuthenticationEntryPoint authenticationEntryPoint;
 
-    @Autowired
-    private AccessDeniedHandler accessDeniedHandler;
+        @Autowired
+        private AccessDeniedHandler accessDeniedHandler;
 
-    @Bean
-    @Order(1)
-    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.requestMatchers(requestMatcherCustomizer -> requestMatcherCustomizer
-                .antMatchers("/api/**", "/auth/**"))
-                .authorizeRequests(authorizeRequestsCustomizer -> authorizeRequestsCustomizer
-                        .anyRequest()
-                        .permitAll())
-                .csrf(csrfCustomizer -> csrfCustomizer
-                        .disable())
-                .sessionManagement(sessionManagmentCustomizer -> sessionManagmentCustomizer
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(accessTokenRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(exceptionHandlingCustomizer -> exceptionHandlingCustomizer
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler))
-                .cors();
+        @Bean
+        @Order(1)
+        public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+                http.requestMatchers(requestMatcherCustomizer -> requestMatcherCustomizer
+                                .antMatchers("/api/**", "/auth/**"))
+                                .authorizeRequests(authorizeRequestsCustomizer -> authorizeRequestsCustomizer
+                                                .anyRequest()
+                                                .permitAll())
+                                .csrf(csrfCustomizer -> csrfCustomizer
+                                                .disable())
+                                .sessionManagement(sessionManagmentCustomizer -> sessionManagmentCustomizer
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .addFilterBefore(accessTokenRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                                .exceptionHandling(exceptionHandlingCustomizer -> exceptionHandlingCustomizer
+                                                .authenticationEntryPoint(authenticationEntryPoint)
+                                                .accessDeniedHandler(accessDeniedHandler))
+                                .cors();
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
+        @Bean
+        @Order(2)
+        public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        http.requestMatchers(requestMatcherCustomizer -> requestMatcherCustomizer
-                .antMatchers("/admin/**"))
-                .authorizeRequests(authorizeRequestsCustomizer -> authorizeRequestsCustomizer
-                        .antMatchers("/admin/resetar-senha/**").permitAll()
-                        .anyRequest()
-                        .hasAuthority(TipoUsuario.ADMIN.name()))
-                .formLogin(formLoginCustomizer -> formLoginCustomizer
-                        .loginPage("/admin/login")
-                        .usernameParameter("email")
-                        .passwordParameter("senha")
-                        .defaultSuccessUrl("/admin/servicos")
-                        .permitAll())
-                .logout(logoutCustomizer -> logoutCustomizer
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"))
-                        .logoutSuccessUrl("/admin/login"))
-                .rememberMe(rememberMeCustomizer -> rememberMeCustomizer
-                        .rememberMeParameter("lembrar-me")
-                        .tokenValiditySeconds(rememberMeValiditySeconds)
-                        .key(rememberMeKey))
-                .exceptionHandling(exceptionHandlingCustomizer -> exceptionHandlingCustomizer
-                        .accessDeniedPage("/admin/login"));
+                http.requestMatchers(requestMatcherCustomizer -> requestMatcherCustomizer
+                                .antMatchers("/admin/**"))
+                                .authorizeRequests(authorizeRequestsCustomizer -> authorizeRequestsCustomizer
+                                                .antMatchers("/admin/resetar-senha/**").permitAll()
+                                                .anyRequest()
+                                                .hasAuthority(TipoUsuario.ADMIN.name()))
+                                .formLogin(formLoginCustomizer -> formLoginCustomizer
+                                                .loginPage("/admin/login")
+                                                .usernameParameter("email")
+                                                .passwordParameter("senha")
+                                                .defaultSuccessUrl("/admin/servicos")
+                                                .permitAll())
+                                .logout(logoutCustomizer -> logoutCustomizer
+                                                .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"))
+                                                .logoutSuccessUrl("/admin/login"))
+                                .rememberMe(rememberMeCustomizer -> rememberMeCustomizer
+                                                .rememberMeParameter("lembrar-me")
+                                                .tokenValiditySeconds(rememberMeValiditySeconds)
+                                                .key(rememberMeKey))
+                                .exceptionHandling(exceptionHandlingCustomizer -> exceptionHandlingCustomizer
+                                                .accessDeniedPage("/admin/login"));
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring()
-                .antMatchers("/webjars/**")
-                .antMatchers("/img/**");
-    }
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+                return web -> web.ignoring()
+                                .antMatchers("/webjars/**")
+                                .antMatchers("/img/**");
+        }
 
-    @Bean
-    public AuthenticationManager authorizationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager authorizationManager(AuthenticationConfiguration authenticationConfiguration)
+                        throws Exception {
+                return authenticationConfiguration.getAuthenticationManager();
+        }
 }

@@ -30,8 +30,6 @@ public class ApiResetSenhaService {
     public MensagemResponse solicitarResetSenha(ResetSenhaRequest request) {
         var passwordReset = passwordResetService.criarPasswordReset(request.getEmail());
 
-        System.out.println("TOKEN ****************: " + passwordReset.getToken());
-
         if (passwordReset != null) {
             var props = new HashMap<String, Object>();
             props.put("link",

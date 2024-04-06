@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -23,6 +25,8 @@ import br.com.treinaweb.ediaristas.core.repositories.FotoRepository;
 import br.com.treinaweb.ediaristas.core.services.storage.adapters.StorageService;
 import br.com.treinaweb.ediaristas.core.services.storage.exceptions.StorageServiceException;
 
+@Service
+@Profile("prod")
 public class S3StorageService implements StorageService {
 
     @Value("${br.com.treinaweb.ediaristas.s3.accessKey}")
@@ -47,6 +51,13 @@ public class S3StorageService implements StorageService {
         } catch (IOException e) {
             throw new StorageServiceException(e.getLocalizedMessage());
         }
+    }
+
+    @Override
+    public void apagar(String filename) throws StorageServiceException {
+        var s3Client = getS3Cliente();
+        s3Client.deleteObject(bucket, filename);
+
     }
 
     private Foto trySalvar(MultipartFile file) throws IOException {
@@ -104,12 +115,6 @@ public class S3StorageService implements StorageService {
     private AWSCredentialsProvider getS3CredencialsProvider() {
         var s3Credencials = new BasicAWSCredentials(accessKey, secretKey);
         return new AWSStaticCredentialsProvider(s3Credencials);
-    }
-
-    @Override
-    public void apagar(String filename) throws StorageServiceException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'apagar'");
     }
 
 }

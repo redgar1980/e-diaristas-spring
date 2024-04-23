@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -90,25 +90,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException exception,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
-        return handleBindException(exception, headers, status, request);
-    }
-
-    public ResponseEntity<Object> hadleGatewayPagamentoException(GatewayPagamentoException exception,
-            HttpServletRequest request) {
-        return criarErrorResponse(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), request.getRequestURI());
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleBindException(
-            BindException exception,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
+    @SuppressWarnings("null")
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         var body = new HashMap<String, List<String>>();
 
         exception.getBindingResult().getFieldErrors()
@@ -125,6 +109,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                     }
                 });
         return ResponseEntity.badRequest().body(body);
+    }
+
+    public ResponseEntity<Object> hadleGatewayPagamentoException(GatewayPagamentoException exception,
+            HttpServletRequest request) {
+        return criarErrorResponse(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), request.getRequestURI());
     }
 
     private ResponseEntity<Object> criarErrorResponse(HttpStatus status, String mensagem, String path) {

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import br.com.treinaweb.ediaristas.api.dtos.requests.AvaliacaoRequest;
 import br.com.treinaweb.ediaristas.api.dtos.responses.MensagemResponse;
 import br.com.treinaweb.ediaristas.api.mappers.ApiAvaliacaoMapper;
-import br.com.treinaweb.ediaristas.core.events.NovaAvaliacaoEvent;
 import br.com.treinaweb.ediaristas.core.exceptions.DiariaNaoEncontradaException;
 import br.com.treinaweb.ediaristas.core.models.Avaliacao;
 import br.com.treinaweb.ediaristas.core.models.Diaria;

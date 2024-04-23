@@ -12,6 +12,7 @@ public class ScheduleConfig implements SchedulingConfigurer {
 
     private static final int POOL_SIZE = 10;
 
+    @SuppressWarnings("null")
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         var taskScheduler = new ThreadPoolTaskScheduler();

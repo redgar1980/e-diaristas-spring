@@ -2,7 +2,7 @@ package br.com.treinaweb.ediaristas.web.controllers;
 
 import java.security.Principal;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,27 +22,26 @@ import br.com.treinaweb.ediaristas.web.dtos.UsuarioCadastroForm;
 import br.com.treinaweb.ediaristas.web.dtos.UsuarioEdicaoForm;
 import br.com.treinaweb.ediaristas.web.services.WebUsuarioService;
 
-
 @Controller
 @RequestMapping("/admin/usuarios")
 public class UsuarioController {
 
     @Autowired
     private WebUsuarioService service;
-    
+
     @GetMapping
-    public ModelAndView buscarTodos(){
-         var modelAndView = new ModelAndView("/admin/usuario/lista");
+    public ModelAndView buscarTodos() {
+        var modelAndView = new ModelAndView("/admin/usuario/lista");
 
-         modelAndView.addObject("usuarios", service.buscarTodos());
+        modelAndView.addObject("usuarios", service.buscarTodos());
 
-         return modelAndView;
+        return modelAndView;
     }
-    
-    @GetMapping("/cadastrar")
-    public ModelAndView cadastrar () {
 
-        var modelAndView  = new ModelAndView("/admin/usuario/cadastro-form");
+    @GetMapping("/cadastrar")
+    public ModelAndView cadastrar() {
+
+        var modelAndView = new ModelAndView("/admin/usuario/cadastro-form");
 
         modelAndView.addObject("cadastroForm", new UsuarioCadastroForm());
 
@@ -50,23 +49,22 @@ public class UsuarioController {
     }
 
     @PostMapping("/cadastrar")
-    public String cadastrar(@Valid @ModelAttribute("cadastroForm") UsuarioCadastroForm cadastroForm, 
-                             BindingResult result, 
-                             RedirectAttributes attrs
-    )  {
-            if (result.hasErrors()) {
-                return "admin/usuario/cadastro-form";
-            }
-            
-            try {
-                service.cadastrar(cadastroForm);
-                attrs.addFlashAttribute("alert", new  FlashMessage("alert-success", "Usuário cadastrado com sucesso!"));
-            } catch (ValidacaoException e) {
-                result.addError(e.getFieldError());
-                return "admin/usuario/cadastro-form";
-            }
+    public String cadastrar(@Valid @ModelAttribute("cadastroForm") UsuarioCadastroForm cadastroForm,
+            BindingResult result,
+            RedirectAttributes attrs) {
+        if (result.hasErrors()) {
+            return "admin/usuario/cadastro-form";
+        }
 
-            return "redirect:/admin/usuarios";
+        try {
+            service.cadastrar(cadastroForm);
+            attrs.addFlashAttribute("alert", new FlashMessage("alert-success", "Usuário cadastrado com sucesso!"));
+        } catch (ValidacaoException e) {
+            result.addError(e.getFieldError());
+            return "admin/usuario/cadastro-form";
+        }
+
+        return "redirect:/admin/usuarios";
 
     }
 
@@ -75,16 +73,15 @@ public class UsuarioController {
         var modelAndView = new ModelAndView("admin/usuario/edicao-form");
 
         modelAndView.addObject("edicaoForm", service.buscarFormPorId(id));
-        
+
         return modelAndView;
     }
 
     @PostMapping("/{id}/editar")
-    public String editar(@PathVariable Long id, 
-                        @Valid @ModelAttribute("edicaoForm") UsuarioEdicaoForm edicaoForm, 
-                        BindingResult result, 
-                        RedirectAttributes attrs
-    ) {
+    public String editar(@PathVariable Long id,
+            @Valid @ModelAttribute("edicaoForm") UsuarioEdicaoForm edicaoForm,
+            BindingResult result,
+            RedirectAttributes attrs) {
         if (result.hasErrors()) {
             return "admin/usuario/edicao-form";
         }
@@ -98,7 +95,6 @@ public class UsuarioController {
         }
 
         return "redirect:/admin/usuarios";
-        
 
     }
 
@@ -121,11 +117,10 @@ public class UsuarioController {
     }
 
     @PostMapping("/alterar-senha")
-    public String alterarSenha(@Valid @ModelAttribute("alterarSenhaForm") AlterarSenhaForm alterarSenhaForm, 
-        BindingResult result, 
-        RedirectAttributes atts, 
-        Principal principal
-    ) {
+    public String alterarSenha(@Valid @ModelAttribute("alterarSenhaForm") AlterarSenhaForm alterarSenhaForm,
+            BindingResult result,
+            RedirectAttributes atts,
+            Principal principal) {
         if (result.hasErrors()) {
             return "admin/usuario/alterar-senha";
         }

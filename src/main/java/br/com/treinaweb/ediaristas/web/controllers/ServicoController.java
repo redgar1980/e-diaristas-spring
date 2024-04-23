@@ -1,6 +1,6 @@
 package br.com.treinaweb.ediaristas.web.controllers;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +21,11 @@ import br.com.treinaweb.ediaristas.web.services.WebServicoService;
 @Controller
 @RequestMapping("/admin/servicos")
 public class ServicoController {
-    
+
     @Autowired
     private WebServicoService service;
 
-    //Action para listar todos
+    // Action para listar todos
     @GetMapping
     public ModelAndView buscarTodos() {
         var modelAndView = new ModelAndView("admin/servico/lista");
@@ -45,8 +45,9 @@ public class ServicoController {
     }
 
     @PostMapping("/cadastrar")
-    public String cadastrar(@Valid @ModelAttribute("form") ServicoForm form, BindingResult result, RedirectAttributes attrs) {
-        if (result.hasErrors()){
+    public String cadastrar(@Valid @ModelAttribute("form") ServicoForm form, BindingResult result,
+            RedirectAttributes attrs) {
+        if (result.hasErrors()) {
             return "admin/servico/form";
         }
 
@@ -56,19 +57,20 @@ public class ServicoController {
         return "redirect:/admin/servicos";
     }
 
-    //Action para editar cadastro
+    // Action para editar cadastro
     @GetMapping("/{id}/editar")
-    public ModelAndView editar (@PathVariable Long id) {
+    public ModelAndView editar(@PathVariable Long id) {
         var modelAndView = new ModelAndView("admin/servico/form");
-      
+
         modelAndView.addObject("form", service.buscarPorId(id));
 
         return modelAndView;
     }
 
     @PostMapping("/{id}/editar")
-    public String editar(@PathVariable Long id, @Valid @ModelAttribute("form") ServicoForm form, BindingResult result, RedirectAttributes attrs){
-        if (result.hasErrors()){
+    public String editar(@PathVariable Long id, @Valid @ModelAttribute("form") ServicoForm form, BindingResult result,
+            RedirectAttributes attrs) {
+        if (result.hasErrors()) {
             return "admin/servico/form";
         }
 
@@ -79,7 +81,7 @@ public class ServicoController {
 
     }
 
-    //Action para exclusao
+    // Action para exclusao
     @GetMapping("/{id}/excluir")
     public String excluir(@PathVariable Long id, RedirectAttributes attrs) {
         service.excluirPorId(id);
@@ -88,7 +90,7 @@ public class ServicoController {
         return "redirect:/admin/servicos";
     }
 
-    //Utilizado para todas as actions
+    // Utilizado para todas as actions
     @ModelAttribute("icones")
     public Icone[] getIcones() {
         return Icone.values();

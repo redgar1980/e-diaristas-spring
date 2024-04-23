@@ -2,11 +2,11 @@ package br.com.treinaweb.ediaristas.api.dtos.requests;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,7 +26,7 @@ public class UsuarioRequest {
     @NotNull
     @Size(min = 3, max = 255)
     private String nomeCompleto;
-    
+
     @NotNull
     @Size(max = 255)
     @Email
@@ -53,7 +53,7 @@ public class UsuarioRequest {
     @Idade(min = 18, max = 100)
     @DateTimeFormat(iso = ISO.DATE)
     private LocalDate nascimento;
-    
+
     @NotNull
     @Size(min = 11, max = 11)
     private String telefone;

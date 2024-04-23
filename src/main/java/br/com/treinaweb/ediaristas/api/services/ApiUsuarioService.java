@@ -1,6 +1,6 @@
 package br.com.treinaweb.ediaristas.api.services;
 
-import javax.mail.Multipart;
+import jakarta.mail.Multipart;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

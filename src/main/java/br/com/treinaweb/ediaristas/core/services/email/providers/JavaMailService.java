@@ -2,7 +2,7 @@ package br.com.treinaweb.ediaristas.core.services.email.providers;
 
 import java.io.UnsupportedEncodingException;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -40,12 +40,12 @@ public class JavaMailService implements EmailService {
             mimeMessageHelper.setSubject(params.getAssunto());
             mimeMessageHelper.setText(html, true);
         } catch (UnsupportedEncodingException exception) {
-            throw new EmailServiceException(exception.getLocalizedMessage());  
+            throw new EmailServiceException(exception.getLocalizedMessage());
         } catch (MessagingException exception) {
             throw new EmailServiceException(exception.getLocalizedMessage());
         }
-        
+
         mailSender.send(mimeMessage);
     }
-    
+
 }

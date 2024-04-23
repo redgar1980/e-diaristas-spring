@@ -1,7 +1,7 @@
 package br.com.treinaweb.ediaristas.core.validators;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,5 +21,5 @@ public class ServicoExistsByIdValidator implements ConstraintValidator<ServicoEx
         }
         return servicoRepository.existsById(value);
     }
-    
+
 }

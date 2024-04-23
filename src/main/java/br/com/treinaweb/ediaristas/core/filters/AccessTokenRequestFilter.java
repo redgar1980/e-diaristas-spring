@@ -3,10 +3,10 @@ package br.com.treinaweb.ediaristas.core.filters;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,30 +33,29 @@ public class AccessTokenRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-    
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(
-        HttpServletRequest request, 
-        HttpServletResponse response, 
-        FilterChain filterChain
-    ) throws ServletException, IOException {
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         try {
             tryDoFilterInternal(request, response, filterChain);
         } catch (TokenServiceException exception) {
             var status = HttpStatus.UNAUTHORIZED;
-        
+
             var errorResponse = ErrorResponse.builder()
-                .status(status.value())
-                .timestamp(LocalDateTime.now())
-                .mensagem(exception.getLocalizedMessage())
-                .path(request.getRequestURI())
-                .build();
+                    .status(status.value())
+                    .timestamp(LocalDateTime.now())
+                    .mensagem(exception.getLocalizedMessage())
+                    .path(request.getRequestURI())
+                    .build();
 
             var json = objectMapper.writeValueAsString(errorResponse);
-            
+
             response.setStatus(status.value());
             response.setHeader("Content-Type", "application/json");
             response.setCharacterEncoding("utf-8");
@@ -79,11 +78,11 @@ public class AccessTokenRequestFilter extends OncePerRequestFilter {
         if (isEmailNotInContext(email)) {
             addEmailInContext(request, email);
         }
-        
+
         filterChain.doFilter(request, response);
     }
-    
-    private Boolean isTokenPresent (String authorizationHeader) {
+
+    private Boolean isTokenPresent(String authorizationHeader) {
         return authorizationHeader != null && authorizationHeader.startsWith(TOKEN_TYPE);
     }
 

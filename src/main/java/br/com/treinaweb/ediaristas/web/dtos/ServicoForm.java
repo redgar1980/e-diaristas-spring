@@ -2,11 +2,11 @@ package br.com.treinaweb.ediaristas.web.dtos;
 
 import java.math.BigDecimal;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
@@ -24,12 +24,12 @@ public class ServicoForm {
     @NotNull
     @Size(min = 3, max = 50)
     private String nome;
-    
+
     @NotNull
     @PositiveOrZero
     @NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorMinimo;
-    
+
     @NotNull
     @PositiveOrZero
     private Integer qtdHoras;
@@ -39,25 +39,25 @@ public class ServicoForm {
     @Max(100)
     @NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal porcentagemComissao;
-    
+
     @NotNull
     @PositiveOrZero
     private Integer horasQuarto;
-    
+
     @NotNull
     @PositiveOrZero
     @NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorQuarto;
-    
+
     @NotNull
     @PositiveOrZero
     private Integer horasSala;
-    
+
     @NotNull
     @PositiveOrZero
     @NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorSala;
-    
+
     @NotNull
     @PositiveOrZero
     private Integer horasBanheiro;
@@ -66,7 +66,7 @@ public class ServicoForm {
     @PositiveOrZero
     @NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorBanheiro;
-    
+
     @NotNull
     @PositiveOrZero
     private Integer horasCozinha;
@@ -100,5 +100,5 @@ public class ServicoForm {
     @NotNull
     @Positive
     private Integer posicao;
-    
+
 }

@@ -2,10 +2,10 @@ package br.com.treinaweb.ediaristas.core.validators;
 
 import java.time.LocalDateTime;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-public class HoraDepoisDeValidator implements ConstraintValidator<HoraDepoisDe,LocalDateTime>{
+public class HoraDepoisDeValidator implements ConstraintValidator<HoraDepoisDe, LocalDateTime> {
 
     private int horaInicio;
 
@@ -21,9 +21,9 @@ public class HoraDepoisDeValidator implements ConstraintValidator<HoraDepoisDe,L
     }
 
     private void validarParametros() {
-        if (horaInicio < 0){
+        if (horaInicio < 0) {
             throw new IllegalArgumentException("horaInicio não pode ser negativo");
         }
     }
-    
+
 }

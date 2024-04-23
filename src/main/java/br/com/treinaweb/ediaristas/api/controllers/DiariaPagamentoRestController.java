@@ -1,6 +1,6 @@
 package br.com.treinaweb.ediaristas.api.controllers;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,5 +26,5 @@ public class DiariaPagamentoRestController {
     public MensagemResponse pagar(@RequestBody @Valid PagamentoRequest request, @PathVariable Long id) {
         return service.pagar(request, id);
     }
-    
+
 }

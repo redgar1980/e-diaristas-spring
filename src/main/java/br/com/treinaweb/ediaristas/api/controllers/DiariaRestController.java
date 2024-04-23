@@ -2,7 +2,7 @@ package br.com.treinaweb.ediaristas.api.controllers;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import br.com.treinaweb.ediaristas.core.permissions.EDiaristasPermissions;
 @RestController
 @RequestMapping("/api/diarias")
 public class DiariaRestController {
-    
+
     @Autowired
     private ApiDiariaService service;
 
@@ -43,7 +43,7 @@ public class DiariaRestController {
 
     @EDiaristasPermissions.isDiaristaOrCliente
     @GetMapping
-    public List<DiariaResponse> listarPorUsuarioLogado () {
+    public List<DiariaResponse> listarPorUsuarioLogado() {
         var response = service.listarPorUsuarioLogado();
 
         assembler.adicionarLinks(response);
